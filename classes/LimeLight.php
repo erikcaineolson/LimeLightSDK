@@ -23,12 +23,12 @@
 			$logpath = str_replace('classes', 'logs', $_SERVER['DOCUMENT_ROOT']);
 			self::$logger = new Logger($logpath . '/limelight.log', '::');
 
-			$conn = new Connector('system');
+			$conn = new Connector('systems');
 			
 			$dbh = $conn->DBH();
 			$stmt = $dbh->stmt_init();
 
-			if($stmt->prepare('SELECT sysDateAdded AS DateKey, AES_DECRYPT(sysUser, DateKey), AES_DECRYPT(sysPassword, DateKey), AES_DECRYPT(sysLocation, DateKey) FROM systems WHERE sysName = ? AND sysIsActive = ?')){
+			if($stmt->prepare('SELECT sysDateAdded, AES_DECRYPT(sysUser, sysDateAdded), AES_DECRYPT(sysPassword, sysDateAdded), AES_DECRYPT(sysLocation, sysDateAdded) FROM systems WHERE sysName = ? AND sysIsActive = ?')){
 				$is_active = 1;
 				$stmt->bind_param('si', $sysname, $is_active);
 
@@ -216,10 +216,6 @@
 				self::$output_as = 'string';
 			}
 		}
-		
-		function __destruct(){
-			parent::_destruct();
-		}	// END __destruct()
 		
 		private function CampaignFindActive(){
 			self::$method = 'campaign_find_active';
@@ -687,10 +683,6 @@
 				self::$output_as = 'string';
 			}
 		}
-		
-		function __destruct(){
-			parent::_destruct();
-		}	// END __destruct()
 		
 		private function NewOrder($first_name, $last_name, $shipping_address1, $shipping_address2, $shipping_city, $shipping_state, $shipping_zip, $shipping_country, $phone, $email, $credit_card_type, $credit_card_number, $credit_card_exp_mmyy, $credit_card_cvv, $ip_address, $product_id, $campaign_id, $shipping_id, $paypal_token = '', $paypal_payer_id = '', $check_account = '', $check_routing = '', $billing_first_name = '', $billing_last_name = '', $billing_address1 = '', $billing_address2 = '', $billing_city = '', $billing_state = '', $billing_zip = '', $billing_country = '', $upsell_count = 0, $upsell_product_ids = '', $dynamic_product_price_array = '', $notes = '', $product_qty_array = '', $force_gateway_id = '', $thm_session_id = '', $total_installments = '', $afid = '', $sid = '', $affid = '', $c1 = '', $c2 = '', $c3 = '', $aid = '', $opt = '', $click_id = '', $created_by = ''){
 			$fields = NULL;

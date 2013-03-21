@@ -3,7 +3,7 @@ GRANT ALL PRIVILEGES ON systemsdb.* TO 'systemsu'@'localhost' IDENTIFIED BY 'dat
 
 USE systems;
 
-CREATE TABLE system (
+CREATE TABLE systems (
 	sysID INT SIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	sysName VARCHAR (255),
 	sysUser BLOB,

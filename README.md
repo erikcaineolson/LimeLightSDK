@@ -11,3 +11,10 @@ This is a beta, I'm in the process of testing as I put it up. There are companie
 
 I will provide further documentation in the coming days (today is 3/20/2013...gotta keep myself honest ;) ).
 
+=============
+
+This commit also includes two additional classes:
+  * Connector.php
+      Connects to a database using a basic switch. Returns a MySQLi handle.
+  * Logger.php
+      Logs errors, responses, and additional lines. Pass the log filename on class instantiation.

@@ -7,6 +7,7 @@
 		protected static $fullurl;
 		protected static $logger;
 		protected static $method;
+		protected static $output_as;
 		protected static $password;
 		protected static $response;
 		protected static $username;
@@ -83,7 +84,7 @@
 				$api_post = array_merge($api_conn, $fv);
 			}else if($fields != '' && $values != ''){
 				// parameters are non-empty strings
-				$api_post = array_merge($api_conn, array($fields, $values));
+				$api_post = array_merge($api_conn, array($fields => $values));
 			}else{
 				// parameters are empty strings
 				$api_post = $api_conn;
@@ -97,6 +98,8 @@
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $api_post);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($ch, CURLOPT_URL, self::$fullurl);
+			
+			$x = print_r(curl_exec($ch), TRUE);
 			
 			return($cr = curl_exec($ch));
 		}	// END APIConnect()	
@@ -126,10 +129,22 @@
 
 		public function GetArray($data_string){
 			$arr = NULL;
+			$i = NULL;
+			$tmp1 = NULL;
+			$tmp2 = NULL;
 			
-			$arr = array();
-			parse_str($data_string, $arr);
+			// break up the string into field-value pair strings
+			$tmp1 = explode('&', $data_string);
 			
+			//break up the field-value pair strings into an associative array
+			for($i = 0; $i < count($tmp1); $i++){
+				$tmp2 = explode('=', $tmp1[$i]);
+				$arr[$tmp2[0]] = $tmp2[1];
+				unset($tmp2);
+			}
+			
+			//parse_str($data_string, $arr);
+						
 			return $arr;
 		}	// END GetArray()
 
@@ -200,20 +215,19 @@
 		|		ViewProspect (prospect_id)						|
 		|		VoidOrder (req order id)						|
 		\*******************************************************/
-		
-		protected static $fullurl;
-		private static $output_as;
-		
+				
 		function __construct($sysname, $output_type){
 			// set the parent variables
 			parent::__construct($sysname);
 			
-			self::$fullurl = self::$baseurl . 'membership.php';
+			parent::$fullurl = parent::$baseurl . 'membership.php';
 			
 			if($output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
-				self::$output_as = $output_type;
+				parent::$output_as = $output_type;
+				//parent::$output_as = $output_type;
 			}else{
-				self::$output_as = 'string';
+				parent::$output_as = 'string';
+				//parent::$output_as = 'string';
 			}
 		}
 		
@@ -637,11 +651,11 @@
 			}	// END switch
 			
 			if(self::$response !== FALSE){
-				switch(self::$output_as){
+				switch(parent::$output_as){
 					case 'array':
 						$temp_str = self::$response;
 						unset(self::$response);
-						self::$response = self::GetArray($tmp);
+						self::$response = self::GetArray($temp_str);
 						break;
 					case 'xml':
 						$temp_str = self::$response;
@@ -675,12 +689,12 @@
 			// set the parent variables
 			parent::__construct($sysname);
 			
-			self::$fullurl = self::$baseurl . 'transact.php';
+			parent::$fullurl = parent::$baseurl . 'transact.php';
 			
 			if($output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
-				self::$output_as = $output_type;
+				parent::$output_as = $output_type;
 			}else{
-				self::$output_as = 'string';
+				parent::$output_as = 'string';
 			}
 		}
 		
@@ -1230,11 +1244,11 @@
 			}	// END switch
 
 			if(self::$response !== FALSE){
-				switch(self::$output_as){
+				switch(parent::$output_as){
 					case 'array':
 						$temp_str = self::$response;
 						unset(self::$response);
-						self::$response = self::GetArray($tmp);
+						self::$response = self::GetArray($temp_str);
 						break;
 					case 'xml':
 						$temp_str = self::$response;

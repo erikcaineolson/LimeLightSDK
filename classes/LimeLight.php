@@ -16,20 +16,24 @@
 		function __construct($sysname){
 			$conn = NULL;
 			$dbh = NULL;
+			$decrypt_key = NULL;
 			$is_active = NULL;
+			$loc = NULL;
+			$pass = NULL;
 			$rslt = NULL;
 			$stmt = NULL;
+			$user = NULL;
 			
 			// set up the Error/Response Logs
-			$logpath = str_replace('classes', 'logs', $_SERVER['DOCUMENT_ROOT']);
+			$logpath = str_replace('public_html', 'logs', $_SERVER['DOCUMENT_ROOT']);
 			self::$logger = new Logger($logpath . '/limelight.log', '::');
 
 			$conn = new Connector('systems');
 			
 			$dbh = $conn->DBH();
 			$stmt = $dbh->stmt_init();
-
-			if($stmt->prepare('SELECT sysDateAdded, AES_DECRYPT(sysUser, sysDateAdded), AES_DECRYPT(sysPassword, sysDateAdded), AES_DECRYPT(sysLocation, sysDateAdded) FROM systems WHERE sysName = ? AND sysIsActive = ?')){
+			
+			if($stmt->prepare('SELECT sysDateAdded FROM systems WHERE sysName = ? AND sysIsActive = ?')){
 				$is_active = 1;
 				$stmt->bind_param('si', $sysname, $is_active);
 
@@ -39,18 +43,39 @@
 					self::$logger->LogError('__construct() EXECUTE STATEMENT FAILURE', $stmt->error);
 					throw new ErrorException(); 
 				}else{
-					$stmt->bind_result($rslt['DateKey'], $rslt['User'], $rslt['Pass'], $rslt['Location']);
+					$stmt->bind_result($rslt);
 					
 					while($stmt->fetch()){
-						self::$baseurl = $rslt['Location'];
-						self::$password = $rslt['Pass'];
-						self::$username = $rslt['User'];
+						$decrypt_key = $rslt;
 					}	// END fetch loop
+					
+					if($stmt->prepare('SELECT AES_DECRYPT(sysUser, ?), AES_DECRYPT(sysPassword, ?), AES_DECRYPT(sysLocation, ?) FROM systems WHERE sysName = ? AND sysIsActive = ?')){
+						$stmt->bind_param('ssssi', $decrypt_key, $decrypt_key, $decrypt_key, $sysname, $is_active);
+						
+						if(!$stmt->execute()){
+							// execute failure 
+							// log it and throw exception
+							self::$logger->LogError('__construct() decryption EXECUTE STATEMENT FAILURE', $stmt->error);
+						}else{
+							$stmt->bind_result($user, $pass, $loc);
+							
+							while($stmt->fetch()){
+								self::$baseurl = $loc;
+								self::$password = $pass;
+								self::$username = $user;
+							}	// END fetch loop
+						}	// END execute check
+					}else{
+						// prepare failure
+						// log it and throw exception
+						self::$logger->LogError('__construct() decryption PREPARE STATEMENT FAILURE', $stmt->error);
+						throw new ErrorException();
+					}	// END prepare check
 				}	// END execution check
 			}else{
-				// execution failure
+				// prepare failure
 				// log it and throw exception
-				self::$logger->LogError('__construct() PREPARE STATEMENT FAILURE', $stmt->error);
+				self::$logger->LogError('__construct() sysDateAdded PREPARE STATEMENT FAILURE', $stmt->error);
 				throw new ErrorException(); 
 			}	// END prepare check
 		}	//	END __construct()
@@ -89,7 +114,7 @@
 				// parameters are empty strings
 				$api_post = $api_conn;
 			}
-
+			
 			$ch = curl_init();
 			
 			curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
@@ -114,6 +139,22 @@
 			
 			return($array_variable);
 		}	// END ArrayPopulate()
+		
+		protected function AssociativeArrayToArray($associative_array){
+			$array_out = NULL;
+			$i = NULL;
+			$v = NULL;
+			
+			$i = 0;
+			
+			// convert associative array to non-associative
+			foreach($associative_array as $v){
+				$array_out[$i] = $v;
+				$i++;
+			}
+			
+			return $array_out;
+		}
 		
 		protected function WriteXML(XMLWriter $xml, $data){
 			foreach($data as $key => $value){
@@ -229,6 +270,11 @@
 				parent::$output_as = 'string';
 				//parent::$output_as = 'string';
 			}
+			
+			self::$fullurl = parent::$fullurl;
+			self::$output_as = parent::$output_as;
+			self::$password = parent::$password;
+			self::$username = parent::$username;
 		}
 		
 		private function CampaignFindActive(){
@@ -651,7 +697,7 @@
 			}	// END switch
 			
 			if(self::$response !== FALSE){
-				switch(parent::$output_as){
+				switch(self::$output_as){
 					case 'array':
 						$temp_str = self::$response;
 						unset(self::$response);
@@ -681,10 +727,7 @@
 		|	required fields [optional fields]				|
 		|		NewOrder									|
 		|													|
-		\***************************************************/
-		protected static $fullurl;
-		private static $output_as;
-		
+		\***************************************************/	
 		function __construct($sysname, $output_type){
 			// set the parent variables
 			parent::__construct($sysname);
@@ -696,6 +739,11 @@
 			}else{
 				parent::$output_as = 'string';
 			}
+
+			self::$fullurl = parent::$fullurl;
+			self::$output_as = parent::$output_as;
+			self::$password = parent::$password;
+			self::$username = parent::$username;
 		}
 		
 		private function NewOrder($first_name, $last_name, $shipping_address1, $shipping_address2, $shipping_city, $shipping_state, $shipping_zip, $shipping_country, $phone, $email, $credit_card_type, $credit_card_number, $credit_card_exp_mmyy, $credit_card_cvv, $ip_address, $product_id, $campaign_id, $shipping_id, $paypal_token = '', $paypal_payer_id = '', $check_account = '', $check_routing = '', $billing_first_name = '', $billing_last_name = '', $billing_address1 = '', $billing_address2 = '', $billing_city = '', $billing_state = '', $billing_zip = '', $billing_country = '', $upsell_count = 0, $upsell_product_ids = '', $dynamic_product_price_array = '', $notes = '', $product_qty_array = '', $force_gateway_id = '', $thm_session_id = '', $total_installments = '', $afid = '', $sid = '', $affid = '', $c1 = '', $c2 = '', $c3 = '', $aid = '', $opt = '', $click_id = '', $created_by = ''){
@@ -905,7 +953,7 @@
 							'previousOrderId',
 							'upsellCount'
 			);
-					
+			
 			$values = array($tran_type,
 							$product_id,
 							$campaign_id,
@@ -1227,6 +1275,12 @@
 			// instead of throwing an exception
 			// allow Lime Light to respond with an error code
 			// check for (and fix) errors that will break this code
+			$tmp = NULL;
+			
+			$tmp = $parameters;
+			unset($parameters);
+			$parameters = self::AssociativeArrayToArray($tmp);
+			
 			switch(strtolower($do_what)){
 				case 'neworder':
 				default:
@@ -1244,7 +1298,7 @@
 			}	// END switch
 
 			if(self::$response !== FALSE){
-				switch(parent::$output_as){
+				switch(self::$output_as){
 					case 'array':
 						$temp_str = self::$response;
 						unset(self::$response);

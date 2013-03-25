@@ -169,6 +169,7 @@
 		}	// END WriteXML()
 
 		public function GetArray($data_string){
+			/*
 			$arr = NULL;
 			$i = NULL;
 			$tmp1 = NULL;
@@ -183,8 +184,8 @@
 				$arr[$tmp2[0]] = $tmp2[1];
 				unset($tmp2);
 			}
-			
-			//parse_str($data_string, $arr);
+			*/
+			parse_str($data_string, $arr);
 						
 			return $arr;
 		}	// END GetArray()
@@ -849,12 +850,17 @@
 			if(is_array($product_qty_array)){
 				if(is_array($product_list)){
 					for($i = 0; $i < count($product_qty_array); $i++){
-						array_push($fields, 'prodct_qty_' . $product_list[$i]);
+						array_push($fields, 'product_qty_' . $product_list[$i]);
 						array_push($values, $product_qty_array[$i]);	
 					}
 				}else{
 					array_push($fields, 'product_qty_' . $product_list);
 					array_push($values, $product_qty_array[$i]);
+				}
+			}else{
+				if($product_qty_array != ''){
+					array_push($fields, 'product_qty_' . $product_list);
+					array_push($values, $product_qty_array);
 				}
 			}
 			
@@ -997,6 +1003,11 @@
 					array_push($fields, 'product_qty_' . $product_list);
 					array_push($values, $product_qty_array[$i]);
 				}
+			}else{
+				if($product_qty_array != ''){
+					array_push($fields, 'product_qty_' . $product_list);
+					array_push($values, $product_qty_array);
+				}
 			}
 			
 			// extra gateway stuff
@@ -1118,6 +1129,11 @@
 				}else{
 					array_push($fields, 'product_qty_' . $product_list);
 					array_push($values, $product_qty_array[$i]);
+				}
+			}else{
+				if($product_qty_array != ''){
+					array_push($fields, 'product_qty_' . $product_list);
+					array_push($values, $product_qty_array);
 				}
 			}
 			

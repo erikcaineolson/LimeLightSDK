@@ -1,5 +1,5 @@
 <?php
-	require_once('Logger.php');
+	require_once('../autoload.php');
 	
 	class LimeLight {
 		protected $baseurl;

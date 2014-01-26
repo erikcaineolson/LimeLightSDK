@@ -1,23 +1,23 @@
 <?php
 	class Logger{
-		private static $delim;
-		private static $fh;
+		private $delim;
+		private $fh;
 		
 		function __construct($filename, $delimiter){
-			self::$fh = fopen($filename, 'a');
-			self::$delim = $delimiter;
+			$this->$fh = fopen($filename, 'a');
+			$this->$delim = $delimiter;
 		}	// END __construct()
 		
 		function __destruct(){
-			fclose(self::$fh);
+			fclose($this->$fh);
 		}	// END __destruct()
 		
 		public function LogError($title, $message){
 			$output = NULL;
 			
-			$output = date('Y-m-d H:i:s') . self::$delim . 'ERROR' . self::$delim . $title . self::$delim . $message . "\n";
+			$output = date('Y-m-d H:i:s') . $this->$delim . 'ERROR' . $this->$delim . $title . $this->$delim . $message . "\n";
 			
-			fwrite(self::$fh, $output);
+			fwrite($this->$fh, $output);
 		}	// END LogError
 		
 		public function LogLine($line_array){
@@ -26,20 +26,20 @@
 			$output = date('Y-m-d H:i:s');
 			
 			foreach($line_array as $v){
-				$output .= self::$delim . $v;
+				$output .= $this->$delim . $v;
 			}
 			
 			$output .= "\n";
 			
-			fwrite(self::$fh, $output);
+			fwrite($this->$fh, $output);
 		}
 
 		public function LogResponse($title, $message){
 			$output = NULL;
 			
-			$output = date('Y-m-d H:i:s') . self::$delim . 'RESPONSE' . self::$delim . $title . self::$delim . $message . "\n";
+			$output = date('Y-m-d H:i:s') . $this->$delim . 'RESPONSE' . $this->$delim . $title . $this->$delim . $message . "\n";
 			
-			fwrite(self::$fh, $output);
+			fwrite($this->$fh, $output);
 		}	// END LogResponse
 	}
 ?>

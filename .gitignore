@@ -126,6 +126,10 @@ Thumbs.db
 # Folder config file
 Desktop.ini
 
+###############
+## phpStorm 7
+###############
+.idea/*
 
 #############
 ## Python

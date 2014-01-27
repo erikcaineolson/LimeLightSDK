@@ -46,18 +46,14 @@
             // set the parent variables
             parent::__construct($api_username, $api_password, $log_directory, $log_file, $log_delimiter);
 
-            parent::$fullurl = parent::$baseurl . 'membership.php';
+            //parent::$fullurl = parent::$baseurl . 'membership.php';
+            $this->$fullurl = $this->$baseurl . 'membership.php';
 
             if($output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
-                parent::$output_as = $output_type;
+                $this->$output_as = $output_type;
             }else{
-                parent::$output_as = 'string';
+                $this->$output_as = 'string';
             }
-
-            $this->$fullurl = parent::$fullurl;
-            $this->$output_as = parent::$output_as;
-            $this->$password = parent::$password;
-            $this->$username = parent::$username;
 
             print_r($this);
         }

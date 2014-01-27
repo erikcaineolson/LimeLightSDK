@@ -58,6 +58,8 @@
             $this->$output_as = parent::$output_as;
             $this->$password = parent::$password;
             $this->$username = parent::$username;
+
+            print_r($this);
         }
 
         private function CampaignFindActive(){

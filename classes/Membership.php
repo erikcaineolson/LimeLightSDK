@@ -47,12 +47,12 @@
             parent::__construct($api_username, $api_password, $log_directory, $log_file, $log_delimiter);
 
             //parent::$fullurl = parent::$baseurl . 'membership.php';
-            $this->$fullurl = $this->$baseurl . 'membership.php';
+            $this->fullurl = $this->baseurl . 'membership.php';
 
-            if($output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
-                $this->$output_as = $output_type;
+            if($this->output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
+                $this->output_as = $output_type;
             }else{
-                $this->$output_as = 'string';
+                $this->output_as = 'string';
             }
 
             print_r($this);

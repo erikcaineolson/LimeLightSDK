@@ -10,7 +10,7 @@
 		protected $username;
 		
 		// throws exception on database failure
-		function __construct($api_username, $api_password, $log_directory = '', $log_file = '', $log_delimiter = '|'){
+		function __construct($api_username, $api_password, $lime_light_url, $log_directory = '', $log_file = '', $log_delimiter = '|', $output_type = 'xml'){
 			// set up the Error/Response Logs
             // check to see if log parameters were passed
             // if not, create defaults
@@ -22,8 +22,15 @@
                 $log_file = 'limelight.log';
             }
 
-            print_r($log_directory . $log_file);
+            if($output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
+                $this->output_as = $output_type;
+            }else{
+                $this->output_as = 'string';
+            }
+
 			$this->$logger = new Logger($log_directory . $log_file, $log_delimiter);
+
+            $this->baseurl = $lime_light_url;
 
             $this->username = $api_username;
             $this->password = $api_password;

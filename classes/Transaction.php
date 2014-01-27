@@ -7,22 +7,11 @@ class Transaction extends LimeLight {
     |		NewOrder									|
     |													|
     \***************************************************/
-    function __construct($api_username, $api_password, $log_directory = '', $log_file = '', $log_delimiter = '|'){
+    function __construct($api_username, $api_password, $lime_light_url, $log_directory = '', $log_file = '', $log_delimiter = '|', $output_type = 'xml'){
         // set the parent variables
-        parent::__construct($api_username, $api_password, $log_directory, $log_file, $log_delimiter);
+        parent::__construct($api_username, $api_password, $lime_light_url, $log_directory, $log_file, $log_delimiter, $output_type);
 
-        parent::$fullurl = parent::$baseurl . 'transact.php';
-
-        if($output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
-            parent::$output_as = $output_type;
-        }else{
-            parent::$output_as = 'string';
-        }
-
-        $this->$fullurl = parent::$fullurl;
-        $this->$output_as = parent::$output_as;
-        $this->$password = parent::$password;
-        $this->$username = parent::$username;
+        $this->fullurl = $this->baseurl . 'transact.php';
     }
 
     private function NewOrder($first_name, $last_name, $shipping_address1, $shipping_address2, $shipping_city, $shipping_state, $shipping_zip, $shipping_country, $phone, $email, $credit_card_type, $credit_card_number, $credit_card_exp_mmyy, $credit_card_cvv, $ip_address, $product_id, $campaign_id, $shipping_id, $paypal_token = '', $paypal_payer_id = '', $check_account = '', $check_routing = '', $billing_first_name = '', $billing_last_name = '', $billing_address1 = '', $billing_address2 = '', $billing_city = '', $billing_state = '', $billing_zip = '', $billing_country = '', $upsell_count = 0, $upsell_product_ids = '', $dynamic_product_price_array = '', $notes = '', $product_qty_array = '', $force_gateway_id = '', $thm_session_id = '', $total_installments = '', $afid = '', $sid = '', $affid = '', $c1 = '', $c2 = '', $c3 = '', $aid = '', $opt = '', $click_id = '', $created_by = ''){
@@ -217,8 +206,8 @@ class Transaction extends LimeLight {
             array_push($values, $created_by);
         }
 
-        $this->$method = 'NewOrder';
-        $this->$response = $this->APIConnect($fields, $values);
+        $this->method = 'NewOrder';
+        $this->response = $this->APIConnect($fields, $values);
     }	// END NewOrder()
 
     private function NewOrderCardOnFile($product_id, $campaign_id, $shipping_id, $previous_order_id, $initialize_new_subscription = '', $upsell_count = 0, $upsell_product_ids = '', $dynamic_product_price_array = '', $notes = '', $product_qty_array = '', $force_gateway_id = '', $created_by = ''){
@@ -306,8 +295,8 @@ class Transaction extends LimeLight {
             array_push($values, $created_by);
         }
 
-        $this->$method = 'NewOrderCardOnFile';
-        $this->$response = $this->APIConnect($fields, $values);
+        $this->method = 'NewOrderCardOnFile';
+        $this->response = $this->APIConnect($fields, $values);
     }	// END NewOrderCardOnFile()
 
     private function NewOrderWithProspect($credit_card_type, $credit_card_number, $credit_card_exp_mmyy, $credit_card_cvv, $product_id, $campaign_id, $shipping_id, $prospect_id, $billing_same_as_shipping = 'YES', $paypal_token = '', $paypal_payer_id = '', $check_account = '', $check_routing = '', $billing_first_name = '', $billing_last_name = '', $billing_address1 = '', $billing_address2 = '', $billing_city = '', $billing_state = '', $billing_zip = '', $billing_country = '', $upsell_count = 0, $upsell_product_ids = '', $dynamic_product_price_array = '', $notes = '', $product_qty_array = '', $force_gateway_id = '', $thm_session_id = '', $total_installments = '', $created_by = '', $missing_fields_array = ''){
@@ -444,8 +433,8 @@ class Transaction extends LimeLight {
             array_push($values, $created_by);
         }
 
-        $this->$method = 'NewOrderWithProspect';
-        $this->$response = $this->APIConnect($fields, $values);
+        $this->method = 'NewOrderWithProspect';
+        $this->response = $this->APIConnect($fields, $values);
     }	// END NewOrderWithProspect()
 
     private function NewPropspect($email, $ip_address, $campaign_id, $first_name = '', $last_name = '', $address1 = '', $address2 = '', $city = '', $state = '', $zip = '', $country = '', $phone = '', $afid = '', $sid = '', $affid = '', $c1 = '', $c2 = '', $c3 = '', $aid = '', $opt = '', $click_id = '', $notes = ''){
@@ -559,8 +548,8 @@ class Transaction extends LimeLight {
             array_push($values, $created_by);
         }
 
-        $this->$method = 'NewProspect';
-        $this->$response = $this->APIConnect($fields, $values);
+        $this->method = 'NewProspect';
+        $this->response = $this->APIConnect($fields, $values);
     }	// END New Prospect()
 
     // return Lime Light's response string
@@ -591,17 +580,17 @@ class Transaction extends LimeLight {
                 break;
         }	// END switch
 
-        if($this->$response !== FALSE){
-            switch($this->$output_as){
+        if($this->response !== FALSE){
+            switch($this->output_as){
                 case 'array':
-                    $temp_str = $this->$response;
-                    unset($this->$response);
-                    $this->$response = $this->GetArray($temp_str);
+                    $temp_str = $this->response;
+                    unset($this->response);
+                    $this->response = $this->GetArray($temp_str);
                     break;
                 case 'xml':
-                    $temp_str = $this->$response;
-                    unset($this->$response);
-                    $this->$response = $this->GetXML($this->GetArray($temp_str));
+                    $temp_str = $this->response;
+                    unset($this->response);
+                    $this->response = $this->GetXML($this->GetArray($temp_str));
                     break;
                 case 'string':
                 default:
@@ -610,6 +599,6 @@ class Transaction extends LimeLight {
             }
         }
 
-        return $this->$response;
+        return $this->response;
     }   // END CLASS Transaction()
 }?>

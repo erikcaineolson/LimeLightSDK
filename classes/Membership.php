@@ -42,30 +42,24 @@
         |		VoidOrder (req order id)						|
         \*******************************************************/
 
-        function __construct($api_username, $api_password, $log_directory = '', $log_file = '', $log_delimiter = '|'){
+        function __construct($api_username, $api_password, $lime_light_url, $log_directory = '', $log_file = '', $log_delimiter = '|', $output_type = 'xml'){
             // set the parent variables
-            parent::__construct($api_username, $api_password, $log_directory, $log_file, $log_delimiter);
+            parent::__construct($api_username, $api_password, $lime_light_url, $log_directory, $log_file, $log_delimiter, $output_type);
 
             //parent::$fullurl = parent::$baseurl . 'membership.php';
             $this->fullurl = $this->baseurl . 'membership.php';
-
-            if($this->output_type == 'array' || $output_type == 'string' || $output_type == 'xml'){
-                $this->output_as = $output_type;
-            }else{
-                $this->output_as = 'string';
-            }
 
             print_r($this);
         }
 
         private function CampaignFindActive(){
-            $this->$method = 'campaign_find_active';
-            $this->$response = $this->APIConnect('', '');
+            $this->method = 'campaign_find_active';
+            $this->response = $this->APIConnect('', '');
         }	// END CampaignFindActive()
 
         private function CampaignView($campaign_id){
-            $this->$method = 'campaign_view';
-            $this->$response = $this->APIConnect('campaign_id', $campaign_id);
+            $this->method = 'campaign_view';
+            $this->response = $this->APIConnect('campaign_id', $campaign_id);
         }	// END CampaignView
 
         private function CustomerFind($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
@@ -102,8 +96,8 @@
                 array_push($values, $criteria);
             }
 
-            $this->$method = 'customer_find';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'customer_find';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END CustomerFind
 
         private function CustomerGetProducts($customer_id, $campaign_id = ''){
@@ -118,13 +112,13 @@
                 $values = 'campaign_id';
             } 	// END campaign id check
 
-            $this->$method = 'customer_find_active_product';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'customer_find_active_product';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END CustomerGetProducts
 
         private function CustomerView($customer_id){
-            $this->$method = 'customer_view';
-            $this->$response = $this->APIConnect('customer_id', $customer_id);
+            $this->method = 'customer_view';
+            $this->response = $this->APIConnect('customer_id', $customer_id);
         }	// END CustomerView
 
         private function GetAlternativeProvider($campaign_id, $return_url, $cancel_url, $amount){
@@ -134,13 +128,13 @@
             $fields = array('campaign_id', 'return_url', 'cancel_url', 'amount');
             $values = array($campaign_id, $return_url, $cancel_url, $amount);
 
-            $this->$method = 'get_alternative_provider';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'get_alternative_provider';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END GetAlternativeProvider()
 
         private function OrderCalculateRefund($order_id){
-            $this->$method = 'order_calculate_refund';
-            $this->$response = $this->APIConnect('order_id', $order_id);
+            $this->method = 'order_calculate_refund';
+            $this->response = $this->APIConnect('order_id', $order_id);
         }
 
         private function OrderFind($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
@@ -177,8 +171,8 @@
                 array_push($values, $criteria);
             }
 
-            $this->$method = 'order_find';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'order_find';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END OrderFind()
 
         private function OrderFindUpdated($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
@@ -215,13 +209,13 @@
                 array_push($values, $criteria);
             }
 
-            $this->$method = 'order_find';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'order_find';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END OrderFindUpdated()
 
         private function OrderFindOverdue($days_overdue){
-            $this->$method = 'order_find_overdue';
-            $this->$response = $this->APIConnect('days', $days_overdue);
+            $this->method = 'order_find_overdue';
+            $this->response = $this->APIConnect('days', $days_overdue);
         }	// END OrderFindOverdue
 
         private function OrderForceBill($order_id, $gateway_id = ''){
@@ -236,8 +230,8 @@
                 $values = $order_id;
             }	// END gateway check
 
-            $this->$method = 'order_force_bill';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'order_force_bill';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END OrderForceBill
 
         private function OrderRefund($order_id, $amount, $keep_recurring){
@@ -247,13 +241,13 @@
             $fields = array('order_id', 'amount', 'keep_recurring');
             $values = array($order_id, $amount, $keep_recurring);
 
-            $this->$method = 'order_refund';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'order_refund';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END OrderRefund
 
         private function OrderReprocess($order_id){
-            $this->$method = 'order_reprocess';
-            $this->$response = $this->APIConnect('order_id', $order_id);
+            $this->method = 'order_reprocess';
+            $this->response = $this->APIConnect('order_id', $order_id);
         }	// END OrderReprocess()
 
         private function OrderUpdate($order_ids, $actions, $values_in){
@@ -263,8 +257,8 @@
             $fields = array('order_ids', 'actions', 'values');
             $values = array($order_ids, $actions, $values_in);
 
-            $this->$method = 'order_update';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'order_update';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END OrderUpdate
 
         private function OrderUpdateRecurring($order_id, $status){
@@ -274,18 +268,18 @@
             $fields = array('order_id', 'status');
             $values = array($order_id, $status);
 
-            $this->$method = 'order_update_recurring';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'order_update_recurring';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END OrderUpdateRecurring
 
         private function OrderView($order_id){
-            $this->$method = 'order_view';
-            $this->$response = $this->APIConnect('order_id', $order_id);
+            $this->method = 'order_view';
+            $this->response = $this->APIConnect('order_id', $order_id);
         }	// END OrderView
 
         private function OrderVoid($order_id){
-            $this->$method = 'order_void';
-            $this->$response = $this->APIConnect('order_id', $order_id);
+            $this->method = 'order_void';
+            $this->response = $this->APIConnect('order_id', $order_id);
         }	// END OrderVoid
 
         private function ProductCopy($product_id, $new_name = ''){
@@ -295,8 +289,8 @@
             $fields = array('product_id', 'new_name');
             $values = array($product_id, $new_name);
 
-            $this->$method = 'product_copy';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'product_copy';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END ProductCopy()
 
         private function ProductUpdate($product_ids, $actions, $values_in){
@@ -306,13 +300,13 @@
             $fields = array('product_ids', 'actions', 'values');
             $values = array($product_ids, $actions, $values_in);
 
-            $this->$method = 'product_update';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'product_update';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END ProductUpdate()
 
         private function ProductIndex($product_id){
-            $this->$method = 'product_index';
-            $this->$response = $this->APIConnect('product_id', $product_id);
+            $this->method = 'product_index';
+            $this->response = $this->APIConnect('product_id', $product_id);
         }	// END ProductIndex()
 
         private function ProspectFind($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
@@ -349,8 +343,8 @@
                 array_push($values, $criteria);
             }
 
-            $this->$method = 'prospect_find';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'prospect_find';
+            $this->response = $this->APIConnect($fields, $values);
 
         }	// END ProspectFind()
 
@@ -361,13 +355,13 @@
             $fields = array('prospect_ids', 'actions', 'values');
             $values = array($prospect_ids, $actions, $values_in);
 
-            $this->$method = 'prospect_update';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'prospect_update';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END ProspectUpdate
 
         private function ProspectView($prospect_id){
-            $this->$method = 'prospect_view';
-            $this->$response = $this->APIConnect('prospect_id', $prospect_id);
+            $this->method = 'prospect_view';
+            $this->response = $this->APIConnect('prospect_id', $prospect_id);
         }	// END ProspectView()
 
         private function UpsellStopRecurring($order_id, $product_id){
@@ -377,13 +371,13 @@
             $fields = array('order_id', 'product_id');
             $values = array($order_id, $product_id);
 
-            $this->$method = 'upsell_stop_recurring';
-            $this->$response = $this->APIConnect($fields, $values);
+            $this->method = 'upsell_stop_recurring';
+            $this->response = $this->APIConnect($fields, $values);
         }	// END UpsellStopRecurring
 
         private function ValidateCredentials(){
-            $this->$method = 'validate_credentials';
-            $this->$response = $this->APIConnect('', '');
+            $this->method = 'validate_credentials';
+            $this->response = $this->APIConnect('', '');
         }	// END ValidateCredentials()
 
         // return Lime Light's response string
@@ -477,17 +471,17 @@
                     break;
             }	// END switch
 
-            if($this->$response !== FALSE){
-                switch($this->$output_as){
+            if($this->response !== FALSE){
+                switch($this->output_as){
                     case 'array':
-                        $temp_str = $this->$response;
-                        unset($this->$response);
-                        $this->$response = $this->GetArray($temp_str);
+                        $temp_str = $this->response;
+                        unset($this->response);
+                        $this->response = $this->GetArray($temp_str);
                         break;
                     case 'xml':
-                        $temp_str = $this->$response;
-                        unset($this->$response);
-                        $this->$response = $this->GetXML($this->GetArray($temp_str));
+                        $temp_str = $this->response;
+                        unset($this->response);
+                        $this->response = $this->GetXML($this->GetArray($temp_str));
                         break;
                     case 'string':
                     default:
@@ -496,7 +490,7 @@
                 }
             }
 
-            return $this->$response;
+            return $this->response;
         }	// END GetResponse()
     }   // END CLASS Membership()
 ?>

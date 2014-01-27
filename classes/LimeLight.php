@@ -14,11 +14,11 @@
 			// set up the Error/Response Logs
             // check to see if log parameters were passed
             // if not, create defaults
-            if($log_directory == ''){
+            if(!isset($log_directory) || $log_directory == ''){
 			    $log_directory = str_replace('public_html', 'logs', $_SERVER['DOCUMENT_ROOT']);
             }
 
-            if($log_file == ''){
+            if(!isset($log_file) || $log_file == ''){
                 $log_file = 'limelight.log';
             }
 

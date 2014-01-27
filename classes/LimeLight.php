@@ -1,6 +1,4 @@
 <?php
-	require_once('../autoload.php');
-	
 	class LimeLight {
 		protected $baseurl;
 		protected $fullurl;

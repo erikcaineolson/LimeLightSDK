@@ -30,7 +30,7 @@
 
             print_r($log_directory . '/' . $log_file);
 
-			$this->$logger = new Logger($log_directory . '/' . $log_file, $log_delimiter);
+			$this->logger = new Logger($log_directory . '/' . $log_file, $log_delimiter);
 
             $this->baseurl = $lime_light_url;
 
@@ -39,7 +39,7 @@
 		}	//	END __construct()
 		
 		function __destruct(){
-			$this->$logger->__destruct();
+			$this->logger->__destruct();
 		}	// END __destruct()
 		
 		protected function APIConnect($fields, $values){
@@ -51,9 +51,9 @@
 			$fv = NULL;
 			$i = NULL;
 			
-			$api_conn = array('username' => $this->$username,
-							  'password' => $this->$password,
-							  'method' => $this->$method);
+			$api_conn = array('username' => $this->username,
+							  'password' => $this->password,
+							  'method' => $this->method);
 			
 			// check parameters	
 			if(is_array($fields) && is_array($values)){	
@@ -80,7 +80,7 @@
 			curl_setopt($ch, CURLOPT_POST, TRUE);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $api_post);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-			curl_setopt($ch, CURLOPT_URL, $this->$fullurl);
+			curl_setopt($ch, CURLOPT_URL, $this->fullurl);
 			
 			$x = print_r(curl_exec($ch), TRUE);
 			
@@ -143,7 +143,7 @@
 			$xml = new XMLWriter();
 			
 			if(!is_array($data_array)){
-				$this->$logger->LogError('GetXML() INPUT ERROR', 'Data is not formatted as an array');
+				$this->logger->LogError('GetXML() INPUT ERROR', 'Data is not formatted as an array');
 				return false;
 			}else{
 				$xml->openMemory();

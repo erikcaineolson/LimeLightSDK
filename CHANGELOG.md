@@ -11,4 +11,3 @@ v 2.0
 7. Altered the class constructors; all classes are instantiated by passing the following allowing for finer control with minimal re-writes:
    `$api_username, $api_password, $log_directory = '', $log_file = '', $log_delimiter = '|'`
 8. Altered Logger.php, eliminating static usage and allowing for multiple instances of the Logger class
-9. Provided documentation via phpDocumentor 2

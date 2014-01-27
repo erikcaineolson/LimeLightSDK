@@ -48,8 +48,6 @@
 
             //parent::$fullurl = parent::$baseurl . 'membership.php';
             $this->fullurl = $this->baseurl . 'membership.php';
-
-            print_r($this);
         }
 
         private function CampaignFindActive(){

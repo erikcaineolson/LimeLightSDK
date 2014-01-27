@@ -14,11 +14,11 @@
 			// set up the Error/Response Logs
             // check to see if log parameters were passed
             // if not, create defaults
-            if(!isset($log_directory) || $log_directory == ''){
+            if(!isset($log_directory) || $log_directory == '' || $log_directory === NULL){
 			    $log_directory = str_replace('public_html', 'logs', $_SERVER['DOCUMENT_ROOT']);
             }
 
-            if(!isset($log_file) || $log_file == ''){
+            if(!isset($log_file) || $log_file == '' || $log_file === NULL){
                 $log_file = 'limelight.log';
             }
 
@@ -28,7 +28,9 @@
                 $this->output_as = 'string';
             }
 
-			$this->$logger = new Logger($log_directory . $log_file, $log_delimiter);
+            print_r($log_directory . '/' . $log_file);
+
+			$this->$logger = new Logger($log_directory . '/' . $log_file, $log_delimiter);
 
             $this->baseurl = $lime_light_url;
 

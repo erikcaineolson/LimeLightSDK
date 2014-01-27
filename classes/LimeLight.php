@@ -15,7 +15,7 @@
             // check to see if log parameters were passed
             // if not, create defaults
             if(!isset($log_directory) || $log_directory == '' || $log_directory === NULL){
-			    $log_directory = str_replace('public_html', 'logs', $_SERVER['DOCUMENT_ROOT']);
+			    $log_directory = './logs';
             }
 
             if(!isset($log_file) || $log_file == '' || $log_file === NULL){
@@ -27,8 +27,6 @@
             }else{
                 $this->output_as = 'string';
             }
-
-            print_r($log_directory . '/' . $log_file);
 
 			$this->logger = new Logger($log_directory . '/' . $log_file, $log_delimiter);
 

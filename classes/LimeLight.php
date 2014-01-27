@@ -22,6 +22,7 @@
                 $log_file = 'limelight.log';
             }
 
+            print_r($log_directory . $log_file);
 			$this->$logger = new Logger($log_directory . $log_file, $log_delimiter);
 
             $this->username = $api_username;

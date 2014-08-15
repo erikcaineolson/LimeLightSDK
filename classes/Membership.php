@@ -1,45 +1,45 @@
 <?php
     class Membership extends LimeLight {
         /*******************************************************\
-        |	Allowed options for GetResponse():					|
-        |	**params are req'd unless [otherwise noted]**		|
-        |		CalculateOrderRefund (order id)					|
-        |		CopyProduct (product id, [new name])			|
-        |		FindOrder (campaign id, start date, 			|
-        |			end date, [start time], [end time],			|
-        |			[search type], [return type], 				|
-        |			[criteria]									|
-        |		FindOverdueOrder (days overdue)					|
-        |		FindCustomer (campaign id, start date, 			|
-        |			end date, [start time], [end time],			|
-        |			[search type], [return type], 				|
-        |			[criteria]									|
-        |		FindProspect (campaign id, start date, 			|
-        |			end date, [start time], [end time],			|
-        |			[search type], [return type], 				|
-        |			[criteria]									|
-        |		FindUpdatedOrder (campaign id, start date, 		|
-        |			end date, [start time], [end time],			|
-        |			[search type], [return type], 				|
-        |			[criteria]									|
-        |		ForceBill (req order id, opt gateway id)		|
-        |		GetActiveCampaign								|
-        |		GetAlternativeProvider (campaign id, 			|
-        |			return url, cancel url, amount)				|
-        |		GetCustomerProducts								|
-        |		GetOrderRefund (order id, amt, recur?)			|
-        |		GetProductInfo (product id)						|
-        |		StopRecurringUpsell (order_id, product_id)		|
-        |		UpdateOrder (order ids, actions, values)		|
-        |		UpdateProduct (product ids, actions, values)	|
-        |		UpdateProspect (prospect ids, actions, values)	|
-        |		UpdateRecurringOrder (order id, status)			|
-        |		ValidateCredentials (default)					|
-        |		ViewCampaign (campaign id)						|
-        |		ViewCustomer (customer id)						|
-        |		ViewOrder (order id)							|
-        |		ViewProspect (prospect_id)						|
-        |		VoidOrder (req order id)						|
+        |   Allowed options for GetResponse():                  |
+        |   **params are req'd unless [otherwise noted]**       |
+        |       CalculateOrderRefund (order id)                 |
+        |       CopyProduct (product id, [new name])            |
+        |       FindOrder (campaign id, start date,             |
+        |           end date, [start time], [end time],         |
+        |           [search type], [return type],               |
+        |           [criteria]                                  |
+        |       FindOverdueOrder (days overdue)                 |
+        |       FindCustomer (campaign id, start date,          |
+        |           end date, [start time], [end time],         |
+        |           [search type], [return type],               |
+        |           [criteria]                                  |
+        |       FindProspect (campaign id, start date,          |
+        |           end date, [start time], [end time],         |
+        |           [search type], [return type],               |
+        |           [criteria]                                  |
+        |       FindUpdatedOrder (campaign id, start date,      |
+        |           end date, [start time], [end time],         |
+        |           [search type], [return type],               |
+        |           [criteria]                                  |
+        |       ForceBill (req order id, opt gateway id)        |
+        |       GetActiveCampaign                               |
+        |       GetAlternativeProvider (campaign id,            |
+        |           return url, cancel url, amount)             |
+        |       GetCustomerProducts                             |
+        |       GetOrderRefund (order id, amt, recur?)          |
+        |       GetProductInfo (product id)                     |
+        |       StopRecurringUpsell (order_id, product_id)      |
+        |       UpdateOrder (order ids, actions, values)        |
+        |       UpdateProduct (product ids, actions, values)    |
+        |       UpdateProspect (prospect ids, actions, values)  |
+        |       UpdateRecurringOrder (order id, status)         |
+        |       ValidateCredentials (default)                   |
+        |       ViewCampaign (campaign id)                      |
+        |       ViewCustomer (customer id)                      |
+        |       ViewOrder (order id)                            |
+        |       ViewProspect (prospect_id)                      |
+        |       VoidOrder (req order id)                        |
         \*******************************************************/
 
         function __construct($api_username, $api_password, $lime_light_url, $log_directory = '', $log_file = '', $log_delimiter = '|', $output_type = 'xml'){
@@ -53,12 +53,12 @@
         private function CampaignFindActive(){
             $this->method = 'campaign_find_active';
             $this->response = $this->APIConnect('', '');
-        }	// END CampaignFindActive()
+        }   // END CampaignFindActive()
 
         private function CampaignView($campaign_id){
             $this->method = 'campaign_view';
             $this->response = $this->APIConnect('campaign_id', $campaign_id);
-        }	// END CampaignView
+        }   // END CampaignView
 
         private function CustomerFind($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
             $fields = NULL;
@@ -96,7 +96,7 @@
 
             $this->method = 'customer_find';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END CustomerFind
+        }   // END CustomerFind
 
         private function CustomerGetProducts($customer_id, $campaign_id = ''){
             $fields = NULL;
@@ -108,16 +108,16 @@
             }else{
                 $fields = 'customer_id';
                 $values = 'campaign_id';
-            } 	// END campaign id check
+            }   // END campaign id check
 
             $this->method = 'customer_find_active_product';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END CustomerGetProducts
+        }   // END CustomerGetProducts
 
         private function CustomerView($customer_id){
             $this->method = 'customer_view';
             $this->response = $this->APIConnect('customer_id', $customer_id);
-        }	// END CustomerView
+        }   // END CustomerView
 
         private function GetAlternativeProvider($campaign_id, $return_url, $cancel_url, $amount){
             $fields = NULL;
@@ -128,7 +128,7 @@
 
             $this->method = 'get_alternative_provider';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END GetAlternativeProvider()
+        }   // END GetAlternativeProvider()
 
         private function OrderCalculateRefund($order_id){
             $this->method = 'order_calculate_refund';
@@ -171,7 +171,7 @@
 
             $this->method = 'order_find';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END OrderFind()
+        }   // END OrderFind()
 
         private function OrderFindUpdated($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
             $fields = NULL;
@@ -207,14 +207,14 @@
                 array_push($values, $criteria);
             }
 
-            $this->method = 'order_find';
+            $this->method = 'order_find_updated';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END OrderFindUpdated()
+        }   // END OrderFindUpdated()
 
         private function OrderFindOverdue($days_overdue){
             $this->method = 'order_find_overdue';
             $this->response = $this->APIConnect('days', $days_overdue);
-        }	// END OrderFindOverdue
+        }   // END OrderFindOverdue
 
         private function OrderForceBill($order_id, $gateway_id = ''){
             $fields = NULL;
@@ -226,11 +226,11 @@
             }else{
                 $fields = 'order_id';
                 $values = $order_id;
-            }	// END gateway check
+            }   // END gateway check
 
             $this->method = 'order_force_bill';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END OrderForceBill
+        }   // END OrderForceBill
 
         private function OrderRefund($order_id, $amount, $keep_recurring){
             $fields = NULL;
@@ -241,12 +241,12 @@
 
             $this->method = 'order_refund';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END OrderRefund
+        }   // END OrderRefund
 
         private function OrderReprocess($order_id){
             $this->method = 'order_reprocess';
             $this->response = $this->APIConnect('order_id', $order_id);
-        }	// END OrderReprocess()
+        }   // END OrderReprocess()
 
         private function OrderUpdate($order_ids, $actions, $values_in){
             $fields = NULL;
@@ -257,7 +257,7 @@
 
             $this->method = 'order_update';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END OrderUpdate
+        }   // END OrderUpdate
 
         private function OrderUpdateRecurring($order_id, $status){
             $fields = NULL;
@@ -268,17 +268,17 @@
 
             $this->method = 'order_update_recurring';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END OrderUpdateRecurring
+        }   // END OrderUpdateRecurring
 
         private function OrderView($order_id){
             $this->method = 'order_view';
             $this->response = $this->APIConnect('order_id', $order_id);
-        }	// END OrderView
+        }   // END OrderView
 
         private function OrderVoid($order_id){
             $this->method = 'order_void';
             $this->response = $this->APIConnect('order_id', $order_id);
-        }	// END OrderVoid
+        }   // END OrderVoid
 
         private function ProductCopy($product_id, $new_name = ''){
             $fields = NULL;
@@ -289,7 +289,7 @@
 
             $this->method = 'product_copy';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END ProductCopy()
+        }   // END ProductCopy()
 
         private function ProductUpdate($product_ids, $actions, $values_in){
             $fields = NULL;
@@ -300,12 +300,12 @@
 
             $this->method = 'product_update';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END ProductUpdate()
+        }   // END ProductUpdate()
 
         private function ProductIndex($product_id){
             $this->method = 'product_index';
             $this->response = $this->APIConnect('product_id', $product_id);
-        }	// END ProductIndex()
+        }   // END ProductIndex()
 
         private function ProspectFind($campaign_id, $start_date, $end_date, $start_time = '', $end_time = '', $search_type = '', $return_type = '', $criteria = ''){
             $fields = NULL;
@@ -344,7 +344,7 @@
             $this->method = 'prospect_find';
             $this->response = $this->APIConnect($fields, $values);
 
-        }	// END ProspectFind()
+        }   // END ProspectFind()
 
         private function ProspectUpdate($prospect_ids, $actions, $values_in){
             $fields = NULL;
@@ -355,12 +355,12 @@
 
             $this->method = 'prospect_update';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END ProspectUpdate
+        }   // END ProspectUpdate
 
         private function ProspectView($prospect_id){
             $this->method = 'prospect_view';
             $this->response = $this->APIConnect('prospect_id', $prospect_id);
-        }	// END ProspectView()
+        }   // END ProspectView()
 
         private function UpsellStopRecurring($order_id, $product_id){
             $fields = NULL;
@@ -371,12 +371,12 @@
 
             $this->method = 'upsell_stop_recurring';
             $this->response = $this->APIConnect($fields, $values);
-        }	// END UpsellStopRecurring
+        }   // END UpsellStopRecurring
 
         private function ValidateCredentials(){
             $this->method = 'validate_credentials';
             $this->response = $this->APIConnect('', '');
-        }	// END ValidateCredentials()
+        }   // END ValidateCredentials()
 
         // return Lime Light's response string
         // in whatever format is set
@@ -467,7 +467,7 @@
                 case 'voidorder':
                     $this->OrderVoid($parameters);
                     break;
-            }	// END switch
+            }   // END switch
 
             if($this->response !== FALSE){
                 switch($this->output_as){
@@ -489,6 +489,6 @@
             }
 
             return $this->response;
-        }	// END GetResponse()
+        }   // END GetResponse()
     }   // END CLASS Membership()
 ?>
